@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>明細削除確認</title>
+<link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+	
+	<div th:if="${param.timeout}" class="error-msg">
+		セッションが切れました。もう一度ログインしてください。
+	</div>
+		
+	<h2>明細削除確認</h2>
+	
+	<table class="confirm-table" th:object="${deleteEntryForm}">
+		<tr>
+			<td class="guide">【カテゴリ】</td>
+			<td th:text="${categoryName}"></td>
+		</tr>
+		<tr>
+			<td class="guide">【日付】</td>
+			<td th:text="*{date}"></td>
+		</tr>
+		<tr>
+			<td class="guide">【収支区分】</td>
+			<td th:text="*{type}"></td>
+		</tr>
+		<tr>
+			<td class="guide">【金額】</td>
+			<td th:text="*{amount}"></td>
+		</tr>
+		<tr>
+			<td class="guide">【メモ】</td>
+			<td th:text="*{memo}"></td>
+		</tr>
+	</table>
+	
+	<br><br>
+
+    <form th:action="@{/do-delete-entry}" method="POST"
+			th:object="${deleteEntryForm}">
+		<input type="hidden" th:field="*{id}">
+    	<input type="submit" value="削除実行" class="btn">
+   	</form>
+	
+
+
+    <form th:action="@{/show-entry-list}" method="GET"
+			th:object="${deleteEntryForm}">
+		<input type="hidden" th:field="*{id}">
+		<input type="hidden" name="year" th:value="${selectedYear}">
+		<input type="hidden" name="month" th:value="${selectedMonth}">
+		<input type="hidden" name="categoryId" th:value="${selectedCategoryId}">
+    	<input type="submit" value="もどる" class="btn">
+   	</form>
+
+</body>
+</html>

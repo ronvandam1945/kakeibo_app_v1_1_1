@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>家計簿登録</title>
+	<link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+	<div th:if="${param.timeout}" class="error-msg">
+		セッションが切れました。もう一度ログインしてください。
+	</div>
+
+	<h2>家計簿登録</h2>
+
+
+	<br>
+	<br>
+
+	<form th:action="@{/confirm-add-category}" method="POST" th:object="${addCategoryForm}">
+		<br>
+		【カテゴリ名】<br>
+		<input type="text" th:field="*{name}"><br>
+		<div th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="error-msg"></div>
+		<br>
+		【収支区分】<br>
+		<select th:field="*{type}">
+			<option value="">選択してください。</option>
+			<option value="INCOME">収入</option>
+			<option value="EXPENSE">支出</option>
+		</select><br>
+		<div th:if="${#fields.hasErrors('type')}" th:errors="*{type}" class="error-msg"></div>
+		<br>
+		【ソート順】<br>
+		<input type="text" th:field="*{sortOrder}"><br>
+		<div th:if="${#fields.hasErrors('sortOrder')}" th:errors="*{sortOrder}" class="error-msg"></div>
+		<br>
+		<input type="submit" value="登録" class="btn">
+	</form>
+
+	<br>
+	<form th:action="@{/category}" method="GET">
+		<input type="submit" value="もどる" class="btn">
+	</form>
+
+</body>
+
+</html>

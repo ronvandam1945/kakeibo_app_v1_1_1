@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>メニュー画面</title>
+	<link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+	<div th:if="${param.timeout}" class="error-msg">
+		セッションが切れました。もう一度ログインしてください。
+	</div>
+	<h2>メニュー</h2>
+
+	<form th:action="@{/show-entry-list}" method="GET">
+		<input type="submit" value="家計簿一覧" class="btn">
+	</form>
+	<br>
+	
+	<form th:action="@{/add-entry}" method="GET">
+			<input type="submit" value="家計簿登録" class="btn">
+		</form>
+		<br>
+
+	<form th:action="@{/category}" method="GET">
+		<input type="submit" value="カテゴリ管理" class="btn">
+	</form>
+	<br>
+
+	<form th:action="@{/logout}" method="POST">
+		<input type="submit" value="ログアウト" class="btn">
+	</form>
+	<br>
+
+	</body>
+
+</html>

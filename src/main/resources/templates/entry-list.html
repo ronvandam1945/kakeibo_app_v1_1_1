@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>家計簿一覧</title>
+	<link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+	<div th:if="${param.timeout}" class="error-msg">
+		セッションが切れました。もう一度ログインしてください。
+	</div>
+
+	<h2>家計簿一覧</h2>
+
+	<br>
+	<br>
+
+	<form th:action="@{/show-entry-list}" method="get">
+		<!-- 年 -->
+		<label>年</label>
+		<select name="year">
+			<option value="">選択</option>
+			<option th:each="y : ${years}" th:value="${y}" th:text="${y}" th:selected="${y == selectedYear}">
+			</option>
+		</select>
+
+		<!-- 月 -->
+		<label>月</label>
+		<select name="month">
+			<option value="">選択</option>
+			<option th:each="m : ${months}" th:value="${m}" th:text="${m}" th:selected="${m == selectedMonth}">
+			</option>
+		</select>
+
+		<br>
+		<br>
+		<!-- カテゴリ -->
+		<label>カテゴリ</label>
+		<select name="categoryId">
+			<option value="">選択</option>
+			<option th:each="c : ${categoryList}" th:value="${c.id}" th:text="${c.name}"
+				th:selected="${c.id == selectedCategoryId}">
+			</option>
+		</select>
+		<br><br><br>
+		<input type="submit" value="表示" class="btn">
+	</form>
+
+	<br><br>
+
+	<div th:if="${entryList} != null">
+		<p>収入合計: <span th:text="${incomeTotal}"></span></p>
+		<p>支出合計: <span th:text="${expenseTotal}"></span></p>
+		<br>
+		<!-- 結果テーブル -->
+		<table>
+			<tr>
+				<th colspan="2">明細</th>
+				<th>日付</th>
+				<th>カテゴリ</th>
+				<th>金額</th>
+				<th>メモ</th>
+				
+			</tr>
+			<tr th:each="e : ${entryList}">
+				<td>
+					<form th:action="@{/edit-entry}" method="POST">
+						<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+						<input type="hidden" name="id" th:value="${e.id}">
+						<!-- 検索条件を持ち回す -->
+						<input type="hidden" name="year" th:value="${selectedYear}">
+						<input type="hidden" name="month" th:value="${selectedMonth}">
+						<input type="hidden" name="categoryId" th:value="${selectedCategoryId}">
+						<input type="submit" value="編集" class="tbtn">
+					</form>
+				</td>
+				<td>
+					<form th:action="@{/confirm-delete-entry}" method="POST">
+						<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+						<input type="hidden" name="id" th:value="${e.id}">
+						<!-- 検索条件を持ち回す -->
+						<input type="hidden" name="year" th:value="${selectedYear}">
+						<input type="hidden" name="month" th:value="${selectedMonth}">
+						<input type="hidden" name="categoryId" th:value="${selectedCategoryId}">
+						<input type="submit" value="削除" class="tbtn">
+					</form>
+				</td>
+				<td th:text="${e.entryDate}"></td>
+				<td th:text="${e.categoryName}"></td>
+				<td th:text="${e.amount}"></td>
+				<td th:text="${e.memo}"></td>
+			</tr>
+		</table>
+
+		
+	</div>
+
+	<div th:if="${firstVisit}">
+	  <p>条件を選択して「表示」を押してください。</p>
+	</div>
+
+	<div th:if="${firstVisit != true and #lists.isEmpty(entryList)}">
+	  <p>データがありません。</p>
+	</div>
+
+	<a th:href="@{/menu}">戻る</a>
+
+
+</body>
+
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>明細登録</title>
+	<link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+	<div th:if="${param.timeout}" class="error-msg">
+		セッションが切れました。もう一度ログインしてください。
+	</div>
+
+	<h2>明細登録</h2>
+
+	<br>
+	<br>
+
+	<form th:action="@{/confirm-add-entry}" method="POST" th:object="${addEntryForm}">
+		<br>
+		<!-- カテゴリ -->
+		<label>カテゴリ</label>
+		<select th:field="*{categoryId}">
+			<option value="">選択</option>
+			<option th:each="c : ${categories}" th:value="${c.id}" th:text="${c.name}">
+			</option>
+		</select>
+		<div th:if="${#fields.hasErrors('categoryId')}" th:errors="*{categoryId}" class="error-msg"></div>
+		<br>
+		<br>
+		<!-- 日付 -->
+		<label>日付</label>
+		<input type="date" th:field="*{date}">
+		<div th:if="${#fields.hasErrors('date')}" th:errors="*{date}" class="error-msg"></div>
+		<br>
+		<br>
+		<!-- 収支区分 -->
+		<label>収支区分</label>
+		<select th:field="*{type}">
+			<option value="">選択</option>
+			<option value="INCOME">収入</option>
+			<option value="EXPENSE">支出</option>
+		</select>
+		<div th:if="${#fields.hasErrors('type')}" th:errors="*{type}" class="error-msg"></div>
+		<br>
+		<br>
+		<!-- 金額 -->
+		<label>金額</label>
+		<input type="text" th:field="*{amount}"><br>
+		<div th:if="${#fields.hasErrors('amount')}" th:errors="*{amount}" class="error-msg"></div>
+		<br>
+		<!-- メモ-->
+		<label>メモ</label>
+		<input type="text" th:field="*{memo}"><br>
+		<div th:if="${#fields.hasErrors('memo')}" th:errors="*{memo}" class="error-msg"></div>
+		<br><br>
+		<input type="submit" value="登録" class="btn">
+	</form>
+
+	<br><br><br>
+	<form th:action="@{/menu}" method="GET">
+		<input type="submit" value="もどる" class="btn">
+	</form>
+
+</body>
+
+</html>
